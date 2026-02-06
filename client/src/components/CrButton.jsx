@@ -8,7 +8,7 @@ const CrButton = ({ children, color = 'blue', onClick }) => {
   return (
     <button 
       onClick={onClick}
-      className={`${styles[color]} font-luckiest px-8 py-3 rounded-xl border-b-4 uppercase tracking-widest shadow-lg active:border-b-0 active:translate-y-1 transition-all transform`}
+      className={`${styles[color]} text-white  font-luckiest [text-shadow:0_1.5px_2px_rgba(0,0,0,0.6)]  px-7 py-3 rounded-xl border-b-4 tracking-widest shadow-lg active:border-b-0 active:translate-y-1 transition-all transform`}
     >
       {children}
     </button>
