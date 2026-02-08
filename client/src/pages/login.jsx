@@ -1,6 +1,6 @@
 import React from 'react';
 import CrButton from '../components/CrButton';
-import bgImage from './login.png';
+import bgImage from '../assets/login.png';
 
 const Login = () => {
   return (

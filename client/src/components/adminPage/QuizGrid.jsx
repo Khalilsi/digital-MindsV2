@@ -7,7 +7,7 @@ export default function QuizGrid({ quizzes, onAssign, onDelete }) {
   }
 
   return (
-    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {quizzes.map((q) => (
         <QuizCard key={q.id} quiz={q} onAssign={onAssign} onDelete={onDelete} />
       ))}
