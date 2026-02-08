@@ -40,4 +40,3 @@ export default function QuestionCard({ q, index, onEdit, onDelete }) {
     </div>
   )
 }
-// ...existing code...

@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import QuizHeader from '../components/QuizEdit/QuizHeader'
 import QuestionList from '../components/QuizEdit/QuestionList'
 import QuestionEditor from '../components/QuizEdit/QuestionEditor'
+import { DragDropContext } from '@hello-pangea/dnd'
 
 export default function QuizEditor() {
   const { id } = useParams()
@@ -79,12 +80,25 @@ export default function QuizEditor() {
   function handleCancel() {
     navigate('/admin/quizzes')
   }
+    function onDragEnd(result) {
+    if (!result.destination) return
+    const src = result.source.index
+    const dest = result.destination.index
+    if (src === dest) return
+
+    setQuiz((prev) => {
+      const questions = Array.from(prev.questions)
+      const [moved] = questions.splice(src, 1)
+      questions.splice(dest, 0, moved)
+      return { ...prev, questions }
+    })
+  }
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-slate-900 to-indigo-950 text-white">
       <div className="max-w-6xl mx-auto">
         <QuizHeader title={quiz.title} type={quiz.type} onChangeTitle={changeTitle} onSave={handleSave} onCancel={handleCancel} saving={saving} />
-
+        <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
             <QuestionList
@@ -99,6 +113,7 @@ export default function QuizEditor() {
             <QuestionEditor question={draft} onSave={handleSaveQuestion} onClose={() => { setDraft(null); setEditingId(null) }} />
           </div>
         </div>
+        </DragDropContext>
       </div>
     </div>
   )
