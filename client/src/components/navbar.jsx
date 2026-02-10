@@ -1,32 +1,68 @@
-import React from 'react';
-import logo from '../assets/logoHackathon.png';
+// ...existing code...
+import React from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import logo from '../assets/logoHackathon.png'
+import CrButton from './CrButton'
 
-const Navbar = () => {
+export default function Navbar() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  function handleLogout() {
+    try { localStorage.removeItem('auth') } catch {}
+    navigate('/')
+  }
+
   return (
-    <nav className="w-full h-auto bg-[#163a82] border-b-2 border-black shadow-lg fixed top-0 z-50">
-      {/* Texture Overlay (Makes the grey look like stone) */}
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-cr-blue-dark border-cr-blue-dark text-white border-white/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link to="/admin/quizzes" aria-label="Home" className="flex items-center gap-3">
+              {/* crown + logo to give a royal feel */}
+              <img
+                src={logo}
+                alt="Hackathon"
+                className="h-24 w-auto object-contain transform transition-transform hover:scale-105"
+              />
+            </Link>
 
-      {/* Content Container (Full width with padding) */}
-      <div className="w-full flex justify-between items-center px-4 relative z-10">
-        
-        {/* LEFT SIDE: Big Logo */}
-        <div className="flex items-center">
-          <img 
-            src={logo} 
-            alt="Hackathon Logo" 
-            className="max-h-24 w-auto transform drop-shadow-xl hover:scale-105 transition-transform cursor-pointer" 
-          />
-        </div>
+            <div className="hidden md:flex items-center space-x-2">
+              <Link
+                to="/admin/quizzes"
+                className={`px-3 py-2 rounded-md text-sm font-luckiest transition ${
+                  location.pathname.startsWith('/admin/quizzes')
+                    ? 'bg-yellow-400/10 text-yellow-300 ring-1 ring-yellow-300/20'
+                    : 'text-white/90 hover:bg-white/6'
+                }`}
+              >
+                Quizzes
+              </Link>
+              <Link
+                to="/admin/users"
+                className={`px-3 py-2 rounded-md text-sm font-luckiest transition ${
+                  location.pathname.startsWith('/admin/users')
+                    ? 'bg-yellow-400/10 text-yellow-300 ring-1 ring-yellow-300/20'
+                    : 'text-white/90 hover:bg-white/6'
+                }`}
+              >
+                Users
+              </Link>
+            </div>
+          </div>
 
-        {/* RIGHT SIDE: Login Button */}
-        <div className="flex items-center">
-          <button className="bg-cr-blue border-b-4 border-cr-blue-dark px-8 py-1.5 rounded-xl text-white font-luckiest text-lg shadow-md active:border-b-0 active:translate-y-1 transition-all uppercase tracking-wider">
-            Login
-          </button>
+          <div className="flex items-start">
+            <CrButton
+              onClick={handleLogout}
+              color="red"
+              size="sm"
+              aria-label="Logout"
+            >
+              Logout
+            </CrButton>
+          </div>
         </div>
       </div>
     </nav>
-  );
-};
-
-export default Navbar;
+  )
+}
