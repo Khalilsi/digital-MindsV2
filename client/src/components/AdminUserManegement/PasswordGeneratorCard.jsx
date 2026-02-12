@@ -1,46 +1,59 @@
-import React, { useState, useEffect, useRef } from 'react'
-import CrButton from '../CrButton'
+import React, { useState, useEffect, useRef } from "react";
+import CrButton from "../CrButton";
 import { MdOutlineContentCopy } from "react-icons/md";
+import { authFetch } from "../../utils/auth";
+
+const API_BASE_URL =
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:4000";
 
 export default function PasswordGeneratorCard({ userId, onGenerated }) {
-  const [loading, setLoading] = useState(false)
-  const [lastPw, setLastPw] = useState(null)
-  const [copied, setCopied] = useState(false)
-  const copyTimerRef = useRef(null)
+  const [loading, setLoading] = useState(false);
+  const [lastPw, setLastPw] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const copyTimerRef = useRef(null);
 
   useEffect(() => {
     return () => {
-      if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
-    }
-  }, [])
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
 
   async function generate() {
-    setLoading(true)
+    setLoading(true);
     try {
-      // TODO: call API POST /api/users/:id/password
-      // placeholder: simulate server pw generation
-      await new Promise((r) => setTimeout(r, 700))
-      const pw = Math.random().toString(36).slice(2, 10)
-      setLastPw(pw)
-      onGenerated && onGenerated(pw)
+      const pw = Math.random().toString(36).slice(2, 10);
+      const response = await authFetch(
+        `${API_BASE_URL}/api/admin/users/${userId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password: pw }),
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.message || "Failed to update password");
+      }
+      setLastPw(pw);
+      onGenerated && onGenerated(pw);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   function showCopied() {
-    setCopied(true)
-    if (copyTimerRef.current) clearTimeout(copyTimerRef.current)
-    copyTimerRef.current = setTimeout(() => setCopied(false), 2000)
+    setCopied(true);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
   }
 
   async function handleCopy() {
-    if (!lastPw) return
+    if (!lastPw) return;
     try {
-      await navigator.clipboard.writeText(lastPw)
-      showCopied()
+      await navigator.clipboard.writeText(lastPw);
+      showCopied();
     } catch (e) {
-      console.error('Copy failed', e)
+      console.error("Copy failed", e);
     }
   }
 
@@ -49,14 +62,16 @@ export default function PasswordGeneratorCard({ userId, onGenerated }) {
       <div className="flex items-center justify-between mb-2">
         <div className="text-sm text-white/80">One-time password</div>
         <CrButton size="sm" color="gold" onClick={generate} disabled={loading}>
-          {loading ? 'Generating...' : 'Generate'}
+          {loading ? "Generating..." : "Generate"}
         </CrButton>
       </div>
 
       {lastPw ? (
         <div className="mt-2 p-3 bg-white/6 rounded text-slate-900">
           <div className="flex items-center justify-between gap-3">
-            <div className="font-mono text-base text-white break-all">{lastPw}</div>
+            <div className="font-mono text-base text-white break-all">
+              {lastPw}
+            </div>
             <div className="flex items-center gap-3">
               <CrButton size="icon" onClick={handleCopy} title="Copy password">
                 <MdOutlineContentCopy />
@@ -74,11 +89,13 @@ export default function PasswordGeneratorCard({ userId, onGenerated }) {
               )}
             </div>
           </div>
-          <div className="text-xs text-white mt-2">Password shown only once. Copy it now.</div>
+          <div className="text-xs text-white mt-2">
+            Password shown only once. Copy it now.
+          </div>
         </div>
       ) : (
         <div className="text-sm text-white">No password generated yet.</div>
       )}
     </div>
-  )
+  );
 }

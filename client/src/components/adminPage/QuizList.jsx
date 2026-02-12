@@ -1,10 +1,19 @@
-import React from 'react'
-import CrButton from '../CrButton'
+import React from "react";
+import CrButton from "../CrButton";
 
-
-export default function QuizList({ quizzes, onAssign, onDelete }) {
+export default function QuizList({
+  quizzes,
+  onDelete,
+  onEdit,
+  onAnalyze,
+  showAnalyze = true,
+}) {
   if (!quizzes.length) {
-    return <div className="p-6 bg-white/5 rounded-lg text-center text-white/70">No quizzes found</div>
+    return (
+      <div className="p-6 bg-white/5 rounded-lg text-center text-white/70">
+        No items found
+      </div>
+    );
   }
 
   return (
@@ -16,20 +25,25 @@ export default function QuizList({ quizzes, onAssign, onDelete }) {
 
             <div className="flex items-center gap-3">
               <CrButton
-                color='blue'
-                size='md'
+                color="blue"
+                size="md"
+                onClick={() => onEdit && onEdit(q)}
               >
                 Edit
               </CrButton>
-              <CrButton 
-                color='blue'
-                size='md'
-              >
-                Analyze
-              </CrButton>
-              <CrButton 
-                color='red'
-                size='md'
+              {/* {showAnalyze && (
+                <CrButton
+                  color="blue"
+                  size="md"
+                  onClick={() => onAnalyze && onAnalyze(q)}
+                >
+                  Analyze
+                </CrButton>
+              )} */}
+              <CrButton
+                color="red"
+                size="md"
+                onClick={() => onDelete && onDelete(q.id)}
               >
                 Delete
               </CrButton>
@@ -40,5 +54,5 @@ export default function QuizList({ quizzes, onAssign, onDelete }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
