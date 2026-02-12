@@ -84,7 +84,7 @@ const Login = () => {
       <Helmet>
         <title>Login - Digital Minds</title>
       </Helmet>
-      // Main Container
+      {/* Main Container */}
       <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
         {/* 1. THE IMAGE (Bottom Layer) */}
         <div

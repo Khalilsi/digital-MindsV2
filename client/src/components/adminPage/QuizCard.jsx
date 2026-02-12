@@ -1,7 +1,6 @@
 import React from "react";
 import CrButton from "../CrButton";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
-import { SiGoogleanalytics } from "react-icons/si";
 
 export default function QuizCard({ quiz, onDelete, onEdit, onAnalyze }) {
   return (

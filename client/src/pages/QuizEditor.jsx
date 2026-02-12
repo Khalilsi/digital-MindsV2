@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import QuizHeader from "../components/QuizEdit/QuizHeader";
 import QuestionList from "../components/QuizEdit/QuestionList";
@@ -14,12 +14,15 @@ export default function QuizEditor() {
   const { id } = useParams();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const initial = {
-    id: id === "new" ? null : id,
-    title: state?.title || state?.quiz?.title || "Untitled Quiz",
-    type: state?.type || state?.quiz?.type || "classic",
-    questions: state?.quiz?.questions || [],
-  };
+  const initial = useMemo(
+    () => ({
+      id: id === "new" ? null : id,
+      title: state?.title || state?.quiz?.title || "Untitled Quiz",
+      type: state?.type || state?.quiz?.type || "classic",
+      questions: state?.quiz?.questions || [],
+    }),
+    [id, state],
+  );
 
   const [quiz, setQuiz] = useState(initial);
   const [editingId, setEditingId] = useState(null);
@@ -82,7 +85,7 @@ export default function QuizEditor() {
 
   useEffect(() => {
     setQuiz(initial);
-  }, [id]);
+  }, [initial]);
 
   useEffect(() => {
     if (id === "new") return;
