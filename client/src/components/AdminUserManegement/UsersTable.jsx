@@ -9,6 +9,8 @@ export default function UsersTable({
   loading = false,
   onDelete,
   onToggleStatus,
+  scoreSort,
+  onScoreSortChange,
   pageSize = 8,
 }) {
   const navigate = useNavigate();
@@ -48,7 +50,23 @@ export default function UsersTable({
         <thead className="bg-white/3 text-white/80">
           <tr>
             <th className="px-4 py-3 text-left text-sm">Username</th>
-            <th className="px-4 py-3 text-left text-sm">Score</th>
+            <th className="px-4 py-3 text-left text-sm">
+              <div className="flex items-center gap-2">
+                <span>Score</span>
+                <select
+                  value={scoreSort}
+                  onChange={(e) => onScoreSortChange?.(e.target.value)}
+                  className="bg-white/10 text-white text-xs rounded px-2 py-1 outline-none"
+                >
+                  <option value="desc" className="text-black">
+                    High to Low
+                  </option>
+                  <option value="asc" className="text-black">
+                    Low to High
+                  </option>
+                </select>
+              </div>
+            </th>
             <th className="px-4 py-3 text-left text-sm">Status</th>
             <th className="px-4 py-3 text-left text-sm">Created</th>
             <th className="px-4 py-3 text-right text-sm">Actions</th>

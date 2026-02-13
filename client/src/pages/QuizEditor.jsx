@@ -68,7 +68,7 @@ export default function QuizEditor() {
         (choice) => choice.id === correctId,
       );
       return {
-        question: question.prompt || "",
+        question: stripHtml(question.prompt || "").trim(),
         propositions,
         correctAnswer: correctIndex >= 0 ? correctIndex : 0,
         points: question.points || 1,

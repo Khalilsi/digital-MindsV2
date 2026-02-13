@@ -75,7 +75,7 @@ export default function ProblemForm() {
     try {
       const payload = {
         title: titleText,
-        description: description.trim(),
+        description: descriptionText,
         score: Number(score) || 0,
       };
       const url =

@@ -12,6 +12,7 @@ const API_BASE_URL =
 export default function UsersPage() {
   const [query, setQuery] = useState("");
   const [showNew, setShowNew] = useState(false);
+  const [scoreSort, setScoreSort] = useState("desc");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -58,13 +59,21 @@ export default function UsersPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return users;
-    return users.filter((u) =>
-      (u.username + " " + (u.isActive ? "active" : "inactive"))
-        .toLowerCase()
-        .includes(q),
-    );
-  }, [users, query]);
+    let next = users;
+    if (q) {
+      next = next.filter((u) =>
+        (u.username + " " + (u.isActive ? "active" : "inactive"))
+          .toLowerCase()
+          .includes(q),
+      );
+    }
+
+    next = [...next].sort((a, b) => {
+      const diff = (a.totalScore || 0) - (b.totalScore || 0);
+      return scoreSort === "asc" ? diff : -diff;
+    });
+    return next;
+  }, [users, query, scoreSort]);
 
   async function handleCreate(user) {
     try {
@@ -183,6 +192,8 @@ export default function UsersPage() {
           loading={loading}
           onDelete={handleDelete}
           onToggleStatus={handleToggleStatus}
+          scoreSort={scoreSort}
+          onScoreSortChange={setScoreSort}
         />
 
         <NewUserModal
