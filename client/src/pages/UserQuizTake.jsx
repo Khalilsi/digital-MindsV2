@@ -86,12 +86,21 @@ export default function UserQuizTake() {
 
   async function handleSubmit() {
     if (!quiz) return;
-    const hasMissing = answers.some(
-      (value) => value === null || value === undefined,
-    );
-    if (hasMissing) {
-      setError("Please answer all questions before submitting.");
+    const answeredCount = answers.filter(
+      (value) => value !== null && value !== undefined,
+    ).length;
+    const hasMissing = answeredCount < answers.length;
+
+    if (answeredCount === 0) {
+      setError("Please answer at least one question before submitting.");
       return;
+    }
+
+    if (hasMissing) {
+      const confirmSubmit = window.confirm(
+        "Some questions are unanswered. Do you want to submit anyway?",
+      );
+      if (!confirmSubmit) return;
     }
 
     setIsSubmitting(true);
