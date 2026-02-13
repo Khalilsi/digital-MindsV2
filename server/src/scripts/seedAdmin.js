@@ -23,7 +23,7 @@ async function seedAdmin() {
   try {
     // Vérifier si l'admin existe déjà
     const existingAdmin = await Admin.findOne({
-      email: "mohamedaminehm07@gmail.com",
+      email: "khalil@gmail.com",
     });
 
     if (existingAdmin) {
@@ -36,7 +36,7 @@ async function seedAdmin() {
 
     // Créer l'admin
     const admin = new Admin({
-      email: "mohamedaminehm07@gmail.com",
+      email: "khalil@gmail.com",
       password: hashedPassword,
     });
 
