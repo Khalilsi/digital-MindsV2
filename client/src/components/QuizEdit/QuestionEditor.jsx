@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import CrButton from "../CrButton";
 import RichTextEditor from "./RichTextEditor .jsx";
 
-function stripHtml(html = "") {
-  return html.replace(/<[^>]+>/g, "");
-}
+// Use shared utility – stripHtml for empty-check only
+import { stripHtml } from "../../utils/sanitizeHtml";
 
 export default function QuestionEditor({ question, onSave, onClose }) {
   // work on a local draft so changes are committed only when saved

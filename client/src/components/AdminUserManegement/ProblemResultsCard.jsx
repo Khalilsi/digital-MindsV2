@@ -33,7 +33,11 @@ export default function ProblemResultsCard({ results = [] }) {
 
   function AnswerRow({ index, style, ariaAttributes, lines }) {
     return (
-      <div style={style} {...ariaAttributes} className="px-2 text-sm whitespace-pre-wrap">
+      <div
+        style={style}
+        {...ariaAttributes}
+        className="px-2 text-sm whitespace-pre-wrap"
+      >
         {lines[index] || " "}
       </div>
     );
@@ -118,9 +122,12 @@ export default function ProblemResultsCard({ results = [] }) {
                 {selected.problemTitle}
               </div>
               {selected.problemDescription && (
-                <div className="text-sm text-white/70 mt-2 whitespace-pre-wrap">
-                  {selected.problemDescription}
-                </div>
+                <div
+                  className="text-sm text-white/70 mt-2 whitespace-pre-wrap rich-content"
+                  dangerouslySetInnerHTML={{
+                    __html: selected.problemDescription,
+                  }}
+                />
               )}
             </div>
             <div>

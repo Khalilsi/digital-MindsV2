@@ -150,9 +150,10 @@ export default function UserProblemTake() {
               {problem?.title || "Problem"}
             </h1>
             {problem?.description && (
-              <div className="text-sm text-white/70 mt-2 whitespace-pre-wrap">
-                {problem.description}
-              </div>
+              <div
+                className="text-sm text-white/70 mt-2 whitespace-pre-wrap rich-content"
+                dangerouslySetInnerHTML={{ __html: problem.description }}
+              />
             )}
 
             <div className="mt-5 sm:mt-6">

@@ -30,9 +30,10 @@ export default function UserAssignmentRow({ item, onOpenQuiz, onOpenProblem }) {
           )}
         </div>
         {item.description && (
-          <div className="text-sm text-white/70 mt-1 line-clamp-2">
-            {item.description}
-          </div>
+          <div
+            className="text-sm text-white/70 mt-1 line-clamp-2 rich-content"
+            dangerouslySetInnerHTML={{ __html: item.description }}
+          />
         )}
       </div>
       <div className="shrink-0 w-full sm:w-auto">

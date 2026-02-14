@@ -144,9 +144,12 @@ export default function UserResultsCard({ userId, results = [] }) {
                               : "Unanswered"}
                         </span>
                       </div>
-                      <div className="text-white mb-2">
-                        {answer.question || "(no prompt)"}
-                      </div>
+                      <div
+                        className="text-white mb-2 rich-content"
+                        dangerouslySetInnerHTML={{
+                          __html: answer.question || "(no prompt)",
+                        }}
+                      />
                       <div
                         className={`text-xs rounded px-2 py-1 mb-1 ${
                           isCorrect

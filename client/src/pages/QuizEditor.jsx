@@ -6,6 +6,7 @@ import QuestionEditor from "../components/QuizEdit/QuestionEditor";
 import { DragDropContext } from "@hello-pangea/dnd";
 import { Helmet } from "react-helmet-async";
 import { authFetch } from "../utils/auth";
+import { sanitizeHtml, stripHtml } from "../utils/sanitizeHtml";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:4000";
@@ -31,9 +32,8 @@ export default function QuizEditor() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function stripHtml(html = "") {
-    return html.replace(/<[^>]+>/g, "");
-  }
+  // sanitizeHtml keeps safe formatting (bold, italic, line breaks, lists)
+  // stripHtml removes all tags – used only for validation
 
   function mapApiQuizToUi(apiQuiz) {
     return {
@@ -68,7 +68,7 @@ export default function QuizEditor() {
         (choice) => choice.id === correctId,
       );
       return {
-        question: stripHtml(question.prompt || "").trim(),
+        question: sanitizeHtml(question.prompt || ""),
         propositions,
         correctAnswer: correctIndex >= 0 ? correctIndex : 0,
         points: question.points || 1,

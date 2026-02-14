@@ -4,6 +4,7 @@ import CrButton from "../components/CrButton";
 import RichTextEditor from "../components/QuizEdit/RichTextEditor ";
 import { Helmet } from "react-helmet-async";
 import { authFetch } from "../utils/auth";
+import { sanitizeHtml, stripHtml } from "../utils/sanitizeHtml";
 
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "http://localhost:4000";
@@ -20,9 +21,8 @@ export default function ProblemForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function stripHtml(html = "") {
-    return html.replace(/<[^>]+>/g, "");
-  }
+  // sanitizeHtml keeps safe formatting (bold, italic, line breaks, lists)
+  // stripHtml removes all tags – used only for empty-check validation
 
   useEffect(() => {
     if (!id || id === "new") return;
@@ -60,8 +60,8 @@ export default function ProblemForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     const titleText = title.trim();
-    const descriptionText = stripHtml(description || "").trim();
-    if (!titleText || !descriptionText) {
+    const descriptionPlain = stripHtml(description || "").trim();
+    if (!titleText || !descriptionPlain) {
       setError("Title and description are required.");
       return;
     }
@@ -75,7 +75,7 @@ export default function ProblemForm() {
     try {
       const payload = {
         title: titleText,
-        description: descriptionText,
+        description: sanitizeHtml(description || ""),
         score: Number(score) || 0,
       };
       const url =

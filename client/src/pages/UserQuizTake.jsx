@@ -11,6 +11,18 @@ function stripHtml(html = "") {
   return html.replace(/<[^>]+>/g, "");
 }
 
+/** Render HTML content safely with Tailwind prose-like styles */
+function HtmlContent({ html, className = "" }) {
+  const clean = (html || "").trim();
+  if (!clean || stripHtml(clean) === "") return null;
+  return (
+    <div
+      className={`rich-content ${className}`}
+      dangerouslySetInnerHTML={{ __html: clean }}
+    />
+  );
+}
+
 export default function UserQuizTake() {
   const { id } = useParams();
   const { state } = useLocation();
@@ -179,7 +191,10 @@ export default function UserQuizTake() {
               {quiz?.title || "Quiz"}
             </h1>
             {quiz?.description && (
-              <p className="text-sm text-white/70 mt-2">{quiz.description}</p>
+              <div
+                className="text-sm text-white/70 mt-2 rich-content"
+                dangerouslySetInnerHTML={{ __html: quiz.description }}
+              />
             )}
 
             <div className="mt-5 sm:mt-6 space-y-5 sm:space-y-6">
@@ -192,7 +207,11 @@ export default function UserQuizTake() {
                     Question {questionIndex + 1}
                   </div>
                   <div className="text-white mb-3 sm:mb-4">
-                    {stripHtml(question.question || "") || "Untitled question"}
+                    {stripHtml(question.question || "").trim() ? (
+                      <HtmlContent html={question.question} />
+                    ) : (
+                      "Untitled question"
+                    )}
                   </div>
                   <div className="space-y-2">
                     {(question.propositions || []).map(

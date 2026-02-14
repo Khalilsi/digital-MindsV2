@@ -8,9 +8,10 @@ export default function UserQuizCard({ quiz, onOpen }) {
         {quiz.title}
       </div>
       {quiz.description && (
-        <div className="text-sm text-white/70 mt-1 line-clamp-2">
-          {quiz.description}
-        </div>
+        <div
+          className="text-sm text-white/70 mt-1 line-clamp-2 rich-content"
+          dangerouslySetInnerHTML={{ __html: quiz.description }}
+        />
       )}
       <div className="mt-4 flex justify-end">
         <CrButton color="blue" size="sm" onClick={() => onOpen(quiz)}>
