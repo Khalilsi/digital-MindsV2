@@ -4,6 +4,8 @@ const cors = require("cors");
 const connectDB = require("./src/config/db");
 const adminRoute = require("./src/routes/adminRoute");
 const userRoute = require("./src/routes/userRoute");
+const dns=require ("node:dns/promises"); 
+dns.setServers(["1.1.1.1", "1.0.0.1"]);
 
 const app = express();
 

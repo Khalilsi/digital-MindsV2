@@ -23,6 +23,27 @@ export default function UserResultsCard({ userId, results = [] }) {
     list.length > 10 && typeof VirtualList === "function" && listWidth > 0;
   const listHeight = Math.min(MAX_LIST_HEIGHT, list.length * ITEM_HEIGHT);
 
+  function ResultRow({ index, style, ariaAttributes, items, onSelect }) {
+    const r = items[index];
+    return (
+      <div style={style} {...ariaAttributes}>
+        <button
+          type="button"
+          onClick={() => onSelect(r)}
+          className="w-full text-left flex items-center justify-between bg-white/6 p-3 border-b border-white/6 hover:bg-white/10 transition"
+        >
+          <div>
+            <div className="text-white">{r.quizTitle}</div>
+            <div className="text-xs text-white/60">
+              {r.score} points — {r.takenAt}
+            </div>
+          </div>
+          <div className="text-xs text-white/60">View answers</div>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}
@@ -35,31 +56,12 @@ export default function UserResultsCard({ userId, results = [] }) {
       ) : useVirtual ? (
         <div className="rounded bg-white/6 overflow-hidden">
           <VirtualList
-            height={listHeight}
-            itemCount={list.length}
-            itemSize={ITEM_HEIGHT}
-            width={listWidth}
-          >
-            {({ index, style }) => {
-              const r = list[index];
-              return (
-                <button
-                  type="button"
-                  onClick={() => setSelected(r)}
-                  style={style}
-                  className="w-full text-left flex items-center justify-between bg-white/6 p-3 border-b border-white/6 hover:bg-white/10 transition"
-                >
-                  <div>
-                    <div className="text-white">{r.quizTitle}</div>
-                    <div className="text-xs text-white/60">
-                      {r.score} points — {r.takenAt}
-                    </div>
-                  </div>
-                  <div className="text-xs text-white/60">View answers</div>
-                </button>
-              );
-            }}
-          </VirtualList>
+            rowCount={list.length}
+            rowHeight={ITEM_HEIGHT}
+            rowComponent={ResultRow}
+            rowProps={{ items: list, onSelect: setSelected }}
+            style={{ height: listHeight, width: listWidth }}
+          />
         </div>
       ) : (
         <ul className="space-y-2">

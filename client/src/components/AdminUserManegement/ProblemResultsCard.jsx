@@ -10,13 +10,14 @@ export default function ProblemResultsCard({ results = [] }) {
   const answerRef = useRef(null);
   const [answerWidth, setAnswerWidth] = useState(0);
 
-  function SubmissionRow({ index, style, items, onSelect }) {
+  function SubmissionRow({ index, style, ariaAttributes, items, onSelect }) {
     const r = items[index];
     return (
       <button
         type="button"
         onClick={() => onSelect(r)}
         style={style}
+        {...ariaAttributes}
         className="w-full text-left flex items-center justify-between bg-white/6 p-3 border-b border-white/6 hover:bg-white/10 transition"
       >
         <div>
@@ -30,9 +31,9 @@ export default function ProblemResultsCard({ results = [] }) {
     );
   }
 
-  function AnswerRow({ index, style, lines }) {
+  function AnswerRow({ index, style, ariaAttributes, lines }) {
     return (
-      <div style={style} className="px-2 text-sm whitespace-pre-wrap">
+      <div style={style} {...ariaAttributes} className="px-2 text-sm whitespace-pre-wrap">
         {lines[index] || " "}
       </div>
     );

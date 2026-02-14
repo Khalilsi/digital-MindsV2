@@ -40,6 +40,33 @@ export default function AssignProblemsCard({
   const MAX_LIST_HEIGHT = 400;
   const useVirtual = filtered.length > 25;
 
+  function ProblemRow({ index, style, ariaAttributes, items, assignedIds, selectedIds, onToggle }) {
+    const p = items[index];
+    const isAssigned = assignedIds.includes(p.id);
+    return (
+      <div style={style} {...ariaAttributes} className="flex items-center gap-3 px-3">
+        <label
+          className={`flex items-center gap-3 w-full p-2 ${
+            isAssigned ? "opacity-50" : ""
+          }`}
+        >
+          <input
+            type="checkbox"
+            checked={selectedIds.includes(p.id)}
+            onChange={() => onToggle(p.id)}
+            disabled={isAssigned}
+            aria-label={`Select problem ${p.title}`}
+            className="shrink-0"
+          />
+          <div className="text-white truncate">{p.title}</div>
+          {isAssigned && (
+            <div className="text-xs text-white/60">Assigned</div>
+          )}
+        </label>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="flex gap-2 mb-3">
@@ -66,40 +93,20 @@ export default function AssignProblemsCard({
         ) : useVirtual ? (
           <div className="rounded bg-white/6 overflow-hidden">
             <VirtualList
-              height={Math.min(MAX_LIST_HEIGHT, filtered.length * ITEM_HEIGHT)}
-              itemCount={filtered.length}
-              itemSize={ITEM_HEIGHT}
-              width="100%"
-            >
-              {({ index, style }) => {
-                const p = filtered[index];
-                const isAssigned = assignedProblemIds.includes(p.id);
-                return (
-                  <div
-                    style={style}
-                    className="flex items-center gap-3 px-3"
-                    key={p.id}
-                  >
-                    <label
-                      className={`flex items-center gap-3 w-full p-2 ${isAssigned ? "opacity-50" : ""}`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={selected.includes(p.id)}
-                        onChange={() => toggle(p.id)}
-                        disabled={isAssigned}
-                        aria-label={`Select problem ${p.title}`}
-                        className="shrink-0"
-                      />
-                      <div className="text-white truncate">{p.title}</div>
-                      {isAssigned && (
-                        <div className="text-xs text-white/60">Assigned</div>
-                      )}
-                    </label>
-                  </div>
-                );
+              rowCount={filtered.length}
+              rowHeight={ITEM_HEIGHT}
+              rowComponent={ProblemRow}
+              rowProps={{
+                items: filtered,
+                assignedIds: assignedProblemIds,
+                selectedIds: selected,
+                onToggle: toggle,
               }}
-            </VirtualList>
+              style={{
+                height: Math.min(MAX_LIST_HEIGHT, filtered.length * ITEM_HEIGHT),
+                width: "100%",
+              }}
+            />
           </div>
         ) : (
           <div className="grid gap-2 max-h-64 overflow-auto pr-2">

@@ -30,6 +30,32 @@ export default function AssignedProblemsList({ assignments = [], onUnassign }) {
     list.length > 10 && typeof VirtualList === "function" && listWidth > 0;
   const listHeight = Math.min(MAX_LIST_HEIGHT, list.length * ITEM_HEIGHT);
 
+  function AssignedProblemRow({ index, style, ariaAttributes, items, onUnassign }) {
+    const a = items[index];
+    return (
+      <div
+        style={style}
+        {...ariaAttributes}
+        className="flex items-center justify-between p-3 border-b border-white/6 bg-transparent"
+      >
+        <div className="truncate">
+          <div className="text-white">{a.title || "(untitled)"}</div>
+          <div className="text-xs text-white/60">
+            Assigned: {a.assignedAt || "just now"}
+          </div>
+        </div>
+
+        <CrButton
+          color="red"
+          size="sm"
+          onClick={() => onUnassign && onUnassign(a.id)}
+        >
+          Unassign
+        </CrButton>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}
@@ -40,37 +66,12 @@ export default function AssignedProblemsList({ assignments = [], onUnassign }) {
       {useVirtual ? (
         <div className="rounded bg-white/6 overflow-hidden">
           <VirtualList
-            height={listHeight}
-            itemCount={list.length}
-            itemSize={ITEM_HEIGHT}
-            width={listWidth}
-          >
-            {({ index, style }) => {
-              const a = list[index];
-              return (
-                <div
-                  style={style}
-                  role="listitem"
-                  className="flex items-center justify-between p-3 border-b border-white/6 bg-transparent"
-                >
-                  <div className="truncate">
-                    <div className="text-white">{a.title || "(untitled)"}</div>
-                    <div className="text-xs text-white/60">
-                      Assigned: {a.assignedAt || "just now"}
-                    </div>
-                  </div>
-
-                  <CrButton
-                    color="red"
-                    size="sm"
-                    onClick={() => onUnassign && onUnassign(a.id)}
-                  >
-                    Unassign
-                  </CrButton>
-                </div>
-              );
-            }}
-          </VirtualList>
+            rowCount={list.length}
+            rowHeight={ITEM_HEIGHT}
+            rowComponent={AssignedProblemRow}
+            rowProps={{ items: list, onUnassign }}
+            style={{ height: listHeight, width: listWidth }}
+          />
         </div>
       ) : (
         <ul className="space-y-2 max-h-[480px] overflow-auto">
