@@ -64,7 +64,7 @@ export function sanitizeHtml(html = "") {
       // Strip dangerous attributes (on*, javascript: …)
       const allowedSet = ALLOWED_ATTRS[lower];
       const safeAttrs = (attrs || "").replace(
-        /\s([a-z\-]+)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi,
+        /\s([a-z-]+)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi,
         (attrMatch, name, value) => {
           const n = name.toLowerCase();
           if (n.startsWith("on")) return ""; // event handler
