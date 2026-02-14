@@ -59,6 +59,10 @@ canvas {
 }
 
 /* Rich-content: preserve formatting from the Quill editor */
+.rich-content {
+  white-space: pre-wrap; /* preserve tabs, spaces and line breaks */
+  word-wrap: break-word;
+}
 .rich-content strong,
 .rich-content b {
   font-weight: 700;
@@ -75,7 +79,9 @@ canvas {
   text-decoration: line-through;
 }
 .rich-content p {
-  margin-bottom: 0.5em;
+  margin: 0; /* tight line spacing like the original */
+  padding: 0;
+  min-height: 1.25em; /* keep empty lines visible */
 }
 .rich-content ul {
   list-style: disc;
